@@ -16,11 +16,11 @@ const clearForm = () => {
 };
 
 const updateUI = () => {
-	if (movies.length === 0) {
-		moviesList.classList.remove('visible');
-	} else {
-		moviesList.classList.add('visible');
-	}
+  if (movies.length === 0) {
+    moviesList.classList.remove("visible");
+  } else {
+    moviesList.classList.add("visible");
+  }
 };
 
 const addMovieHandler = () => {
@@ -33,9 +33,11 @@ const addMovieHandler = () => {
   }
 
   const movie = {
-    title: title.value,
+    info: {
+      title: title.value,
+      [extraName.value]: extraValue.value,
+    },
     id: Math.random().toFixed(5),
-    [extraName.value]: extraValue.value,
   };
 
   movies.push(movie);
@@ -51,7 +53,13 @@ const renderMoviesList = () => {
   if (modifiedMovies.length > 0) {
     modifiedMovies.forEach((movie) => {
       const li = document.createElement("li");
-      li.innerText = `${movie.id} ${movie.title}`;
+      let elementText = `${movie.info.title} - `;
+      for (const key in movie.info) {
+        if (key !== "title") {
+          elementText += `${key}: ${movie.info[key]}`;
+        }
+      }
+      li.textContent = elementText;
 
       moviesList.appendChild(li);
     });
@@ -65,7 +73,7 @@ const searchHander = () => {
   const modifiedArr = [];
 
   movies.forEach((el) => {
-    if (el.title.trim().toLowerCase().includes(searchValue)) {
+    if (el.info.title.trim().toLowerCase().includes(searchValue)) {
       modifiedArr.push(el);
     }
   });
