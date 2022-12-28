@@ -16,7 +16,11 @@ const clearForm = () => {
 };
 
 const updateUI = () => {
-  moviesList.style.display = modifiedMovies.length > 0 ? "block" : "none";
+	if (movies.length === 0) {
+		moviesList.classList.remove('visible');
+	} else {
+		moviesList.classList.add('visible');
+	}
 };
 
 const addMovieHandler = () => {
