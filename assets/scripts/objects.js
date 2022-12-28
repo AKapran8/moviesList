@@ -1,30 +1,74 @@
 const addMovieBtn = document.querySelector("#add-movie-btn");
 const searchMovieBtn = document.querySelector("#search-btn");
+const moviesList = document.querySelector("#movie-list");
+
+const title = document.querySelector("#title");
+const extraName = document.querySelector("#extra-name");
+const extraValue = document.querySelector("#extra-value");
 
 const movies = [];
+let modifiedMovies = [];
 
 const clearForm = () => {
-	document.querySelector("#title").value = '';
-	document.querySelector("#extra-name").value = '';
-	document.querySelector("#extra-value").value = '';
-}
+  title.value = "";
+  extraName.value = "";
+  extraValue.value = "";
+};
 
-const addMoviehandler = () => {
-  let title = document.querySelector("#title").value;
-  let extraName = document.querySelector("#extra-name").value;
-  let extraValue = document.querySelector("#extra-value").value;
+const updateUI = () => {
+  moviesList.style.display = modifiedMovies.length > 0 ? "block" : "none";
+};
 
-  if (!title.trim() || !extraName.trim() || !extraValue.trim()) {
+const addMovieHandler = () => {
+  if (
+    !title.value.trim() ||
+    !extraName.value.trim() ||
+    !extraValue.value.trim()
+  ) {
     return;
   }
 
   const movie = {
-    title,
-    id: Math.random(),
-    [extraName]: extraValue,
+    title: title.value,
+    id: Math.random().toFixed(5),
+    [extraName.value]: extraValue.value,
   };
-	movies.push(movie);
-	clearForm();
+
+  movies.push(movie);
+  modifiedMovies = [...movies];
+
+  renderMoviesList();
+  clearForm();
 };
 
-addMovieBtn.addEventListener("click", addMoviehandler);
+const renderMoviesList = () => {
+  moviesList.innerHTML = "";
+  updateUI();
+  if (modifiedMovies.length > 0) {
+    modifiedMovies.forEach((movie) => {
+      const li = document.createElement("li");
+      li.innerText = `${movie.id} ${movie.title}`;
+
+      moviesList.appendChild(li);
+    });
+  }
+};
+
+const searchHander = () => {
+  const filterField = document.querySelector("#filter-title").value;
+  const searchValue = filterField ? filterField.trim().toLowerCase() : "";
+
+  const modifiedArr = [];
+
+  movies.forEach((el) => {
+    if (el.title.trim().toLowerCase().includes(searchValue)) {
+      modifiedArr.push(el);
+    }
+  });
+
+  modifiedMovies = [...modifiedArr];
+  renderMoviesList();
+};
+
+addMovieBtn.addEventListener("click", addMovieHandler);
+searchMovieBtn.addEventListener("click", searchHander);
