@@ -66,16 +66,12 @@ const renderMoviesList = () => {
   }
 };
 
-const searchHander = () => {
+const searchMovieHander = () => {
   const filterField = document.querySelector("#filter-title").value;
   const searchValue = filterField ? filterField.trim().toLowerCase() : "";
 
-  const modifiedArr = [];
-
-  movies.forEach((el) => {
-    if (el.info.title.trim().toLowerCase().includes(searchValue)) {
-      modifiedArr.push(el);
-    }
+  const modifiedArr = movies.filter((el) => {
+    return el.info.title.trim().toLowerCase().includes(searchValue);
   });
 
   modifiedMovies = [...modifiedArr];
@@ -83,4 +79,4 @@ const searchHander = () => {
 };
 
 addMovieBtn.addEventListener("click", addMovieHandler);
-searchMovieBtn.addEventListener("click", searchHander);
+searchMovieBtn.addEventListener("click", searchMovieHander);
